@@ -32,17 +32,12 @@ function generateText() {
     const textInput = document.getElementById('text-input').value;
     const textOutput = document.getElementById('text-output');
     
-    // استدعاء API لمولد النصوص
-    fetch('https://api.openai.com/v1/engines/davinci-codex/completions', {
+    fetch('http://localhost:3000/generate-text', { // تأكد من استخدام عنوان الخادم المناسب في الإنتاج
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer YOUR_OPENAI_API_KEY'
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-            prompt: textInput,
-            max_tokens: 150
-        })
+        body: JSON.stringify({ prompt: textInput })
     })
     .then(response => response.json())
     .then(data => {
@@ -53,28 +48,68 @@ function generateText() {
         textOutput.textContent = 'حدث خطأ، يرجى المحاولة مرة أخرى.';
     });
 }
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 
-function generateImage() {
-    const imagePrompt = document.getElementById('image-prompt').value;
-    const imageOutput = document.getElementById('image-output');
-    
-    // استدعاء API لإنشاء الصور
-    fetch('https://api.example.com/image-generator', {  // استبدل هذا بالـ API المناسب
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer YOUR_API_KEY'
-        },
-        body: JSON.stringify({
-            prompt: imagePrompt
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "YOUR_FIREBASE_API_KEY",
+    authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
+    projectId: "YOUR_FIREBASE_PROJECT_ID",
+    storageBucket: "YOUR_FIREBASE_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_FIREBASE_MESSAGING_SENDER_ID",
+    appId: "YOUR_FIREBASE_APP_ID"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// Sign up new users
+function signUp(email, password) {
+    createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Signed up
+            const user = userCredential.user;
+            console.log('User signed up:', user);
         })
-    })
-    .then(response => response.json())
-    .then(data => {
-        imageOutput.innerHTML = `<img src="${data.image_url}" alt="Generated Image" class="img-fluid">`;
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        imageOutput.textContent = 'حدث خطأ، يرجى المحاولة مرة أخرى.';
-    });
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.error('Error signing up:', errorCode, errorMessage);
+        });
 }
+
+// Sign in existing users
+function signIn(email, password) {
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Signed in
+            const user = userCredential.user;
+            console.log('User signed in:', user);
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.error('Error signing in:', errorCode, errorMessage);
+        });
+}
+<div id="auth-container">
+    <h2>تسجيل الدخول</h2>
+    <div>
+        <input type="email" id="login-email" placeholder="البريد الإلكتروني">
+            <input type="password" id="login-password" placeholder="كلمة المرور">
+                <button onclick="signIn(document.getElementById('login-email').value, document.getElementById('login-password').value)">تسجيل الدخول</button>
+            </div>
+
+            <h2>إنشاء حساب</h2>
+            <div>
+                <input type="email" id="signup-email" placeholder="البريد الإلكتروني">
+                    <input type="password" id="signup-password" placeholder="كلمة المرور">
+                        <button onclick="signUp(document.getElementById('signup-email').value, document.getElementById('signup-password').value)">إنشاء حساب</button>
+                    </div>
+            </div>
