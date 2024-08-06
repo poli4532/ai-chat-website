@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقع أدوات الذكاء الاصطناعي</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="text-center my-4">
+            <h1>أدوات الذكاء الاصطناعي</h1>
+        </header>
+        <main>
+            <div class="row">
+                <div class="col-md-3">
+                    <ul class="list-group">
+                        <li class="list-group-item"><a href="#" onclick="showTool('text-generator')">مولد النصوص</a></li>
+                        <li class="list-group-item"><a href="#" onclick="showTool('image-generator')">أداة إنشاء الصور</a></li>
+                        <!-- أضف باقي الأدوات هنا -->
+                    </ul>
+                </div>
+                <div class="col-md-9">
+                    <div id="tool-container">
+                        <!-- سيتم عرض الأدوات هنا -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
